@@ -1,0 +1,120 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech & Lifestyle Weekly - Tech</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="site-header">
+        <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\logo.jpg" alt="Tech & Lifestyle Weekly Logo" class="logo">
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="articles.html">Articles</a></li>
+                <li><a href="lifesyle.html">Lifestyle</a></li>
+                <li><a href="tech.html">Tech</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="articles">
+    <h1>Our Latest Tech News</h1>
+
+        <div class="article-card">
+        <a href="https://techcrunch.com/2025/09/05/attorneys-general-warn-openai-harm-to-children-will-not-be-tolerated/" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\tech1.webp" alt="OpenAI Faces Heat">
+            <h3>OpenAI Faces Heat Over Child Safety</h3>
+        </a>
+        <p>Attorneys general warn OpenAI ‘harm to children will not be tolerated’.</p>
+    </div>
+
+    <div class="article-card">
+        <a href="https://thenewstack.io/github-loses-its-ceo-and-independence/?fbclid=IwY2xjawMpLIpleHRuA2FlbQIxMABicmlkETFwZzlGWlMxRGh0dm5maDJMAR79glRgPfJmWrM1p5tVeQz_ZbMzC8YG150_sUudSu2W8NTJnqomgTUvpuhyoA_aem_HersMKZPFn5E3iStjBoCGg" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\tech2.jpg" alt="GitHub Shaken">
+            <h3>GitHub Shaken: CEO Steps Down</h3>
+        </a>
+        <p>GitHub loses its CEO and independence.</p>
+    </div>
+
+    <div class="article-card">
+        <a href="https://techcrunch.com/2025/09/05/roblox-announces-short-form-video-feed-for-gameplay-clips-new-ai-tools-for-creators-and-more/" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\tech3.webp" alt="Roblox Evolves">
+            <h3>Play. Create. Share. Roblox Evolves.</h3>
+        </a>
+        <p>Roblox announces video feeds, new AI tools for creators, and more.</p>
+    </div>
+
+    <div class="article-card">
+        <a href="https://techcrunch.com/2025/09/05/google-gemini-dubbed-high-risk-for-kids-and-teens-in-new-safety-assessment/" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\tech4.webp" alt="Google Gemini Risk">
+            <h3>Google’s Gemini: Too Risky for Kids?</h3>
+        </a>
+        <p>Google Gemini dubbed ‘high risk’ for kids and teens in safety review.</p>
+    </div>
+
+    <div class="article-card">
+        <a href="https://techcrunch.com/2025/09/05/personalized-ai-companion-app-dot-is-shutting-down/" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\tech5.webp" alt="Dot AI App Ends">
+            <h3>Dot Fades Out: AI App Can’t Keep Up</h3>
+        </a>
+        <p>Personalized AI companion app Dot is shutting down.</p>
+    </div>
+
+    <div class="article-card">
+        <a href="https://techcrunch.com/2025/09/04/mark-zuckerberg-sues-mark-zuckerberg/" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\tech6.webp" alt="Zuckerberg Lawsuit">
+            <h3>Mark Zuckerberg Sues… Himself?</h3>
+        </a>
+        <p>Mark Zuckerberg sues Mark Zuckerberg.</p>
+    </div>
+
+    </section>
+
+
+    <footer id="site-footer">
+        <p>&copy; 2025 Tech & Lifestyle Weekly. All rights reserved.</p>
+    </footer>
+</body>
+</html>

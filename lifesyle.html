@@ -1,0 +1,135 @@
+<script type="text/javascript">
+    var gk_isXlsx = false;
+    var gk_xlsxFileLookup = {};
+    var gk_fileData = {};
+
+    // Utility function: check if a cell is non-empty
+    function filledCell(cell) {
+        return cell !== '' && cell != null;
+    }
+
+    // Load and process file data
+    function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON (ignore blank rows)
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+
+                // Remove fully empty rows
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Try to identify the header row (based on filled cell count)
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                    row.filter(filledCell).length >= (filteredData[index + 1]?.filter(filledCell).length || 0)
+                );
+
+                // Fallback if header not found or too far down
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                    headerRowIndex = 0;
+                }
+
+                // Convert filtered data back into CSV
+                var csvSheet = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex));
+                var csv = XLSX.utils.sheet_to_csv(csvSheet, { header: 1 });
+
+                return csv;
+            } catch (e) {
+                console.error("Error reading XLSX file:", e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+    }
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech & Lifestyle Weekly - Lifestyle</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Site Header -->
+    <header id="site-header">
+        <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\logo.jpg" alt="Tech & Lifestyle Weekly Logo" class="logo">
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="articles.html">Articles</a></li>
+                <li><a href="lifesyle.html">Lifestyle</a></li>
+                <li><a href="tech.html">Tech</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Welcome to Lifestyle</h1>
+        <p class="intro">Where Inspiration Meets Everyday Living.</p>
+    </section>
+
+    <!-- Articles Section -->
+    <section class="articles">
+    <div class="article-card">
+        <a href="https://abeautifulmess.com/" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\l1.webp" alt="Cook Book"> 
+            <h3>Cook Book</h3></a>
+        <p>Cook smart, eat well — simple recipes for a happy, healthy life.</p>
+    </div>
+
+    <div class="article-card">
+        <a href="https://www.vogue.com/" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\l2.jpg" alt="Vogue">
+            <h3>Vogue</h3></a>
+        <p>Where fashion meets culture — setting the style standard worldwide.</p>
+    </div>
+
+    <div class="article-card">
+        <a href="https://www.nike.com/ph/" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\l3.avif" alt="Nike">
+            <h3>Nike</h3></a>
+        <p>Power your passion — Just Do It.</p>
+    </div>
+
+    <div class="article-card">
+        <a href="https://shein.com/" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\l8.avif" alt="Shein">
+            <h3>Shein</h3></a>
+        <p>Trendy looks you love, at prices you’ll love more.</p>
+    </div>
+
+    <div class="article-card">
+        <a href="https://lips-love.webflow.io/" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\l5.jpeg" alt="Lips Love">
+            <h3>Lips Love</h3></a>
+        <p>Bold colors, soft lips — beauty that speaks.</p>
+    </div>
+
+    <div class="article-card">
+        <a href="https://www.abs-cbn.com/lifestyle" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\l6.png" alt="ABS-CBN">
+            <h3>ABS-CBN</h3></a>
+        <p>Your daily guide to living well, feeling good, and staying inspired.</p>
+    </div>
+
+    <div class="article-card">
+        <a href="https://www.inquirer.net/" target="_blank">
+            <img src="C:\Users\PRINCESS\OneDrive\Documents\SCHOOL\Web System\WEB SYSTEM\Lab2_Magazine\images\l7.jpg" alt="Inquirer.net">
+            <h3>Inquirer.net</h3></a>
+        <p>Breaking stories that matter — your trusted source for news.</p>
+    </div>
+</section>
+
+    <!-- Site Footer -->
+    <footer id="site-footer">
+        <p>&copy; 2025 Tech & Lifestyle Weekly. All rights reserved.</p>
+    </footer>
+</body>
+</html>
