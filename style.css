@@ -168,7 +168,6 @@ nav ul li a:hover {
   box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
 
-
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(30%); }
   to { opacity: 1; transform: translateY(0); }
@@ -309,17 +308,6 @@ input[type="email"] {
     max-width: 100px;
   }
 }
-
-/* Contaacts */
-
-
-/* header {
-  text-align: center;
-  padding: 30px 20px;
-  background: #423736;
-  color: #F4E2D1;
-  animation: slideDown 1.2s ease-in-out;
-} */
 
 header h1 {
   margin: 0;
